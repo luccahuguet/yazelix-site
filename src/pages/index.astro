@@ -1,0 +1,125 @@
+---
+import '../styles/home.css';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Yazelix - Reproducible terminal workspace</title>
+		<meta
+			name="description"
+			content="Yazelix is a reproducible terminal workspace built around Zellij, Yazi, Helix, and a fixed runtime toolset."
+		/>
+	</head>
+	<body>
+		<div class="page-shell">
+			<header class="hero">
+				<nav class="nav" aria-label="Primary navigation">
+					<a class="brand" href="/">
+						<img src="/images/logo.png" alt="" />
+						<span>Yazelix</span>
+					</a>
+					<div class="nav-links">
+						<a href="/start/">Start</a>
+						<a href="/configure/">Configure</a>
+						<a href="/keybindings/">Keys</a>
+						<a href="/blog/">Blog</a>
+						<a href="https://github.com/luccahuguet/yazelix">GitHub</a>
+					</div>
+				</nav>
+				<div class="hero-content">
+					<p class="eyebrow">Zellij, Yazi, Helix, terminal, config, and runtime tools in one package</p>
+					<h1>Yazelix</h1>
+					<p class="hero-copy">
+						A reproducible terminal workspace with a managed file tree, stable editor pane, directional
+						popups, a right agent sidebar, and a curated runtime that works the same locally or over SSH.
+					</p>
+					<div class="hero-actions">
+						<a class="button primary" href="/start/">Start with Yazelix</a>
+						<a class="button secondary" href="/docs/">Read the docs</a>
+					</div>
+				</div>
+			</header>
+
+			<main>
+				<section class="section strip">
+					<div class="section-inner">
+						<h2>The first successful path is short</h2>
+						<p class="section-lede">
+							Yazelix is package-first. Install the flake output, launch the workspace, then keep
+							configuration in one JSONC file unless you intentionally choose a deeper override surface.
+						</p>
+						<div class="terminal" aria-label="Yazelix quickstart command">
+							<div class="terminal-header">quickstart</div>
+							<pre><code>nix profile add github:luccahuguet/yazelix#yazelix
+yzx launch</code></pre>
+						</div>
+					</div>
+				</section>
+
+				<section class="section">
+					<div class="section-inner">
+						<h2>Built around the daily workspace loop</h2>
+						<p class="section-lede">
+							The site starts with what users need on day one: launch, navigate, configure, update, and
+							recover. Deeper reference docs stay available without making the first path feel like repo archaeology.
+						</p>
+						<div class="workflow-grid">
+							<article class="panel">
+								<h3>Navigate spatially</h3>
+								<p>Use Alt+Shift+H/J/K/L for the left sidebar, bottom popup, top popup, and right agent sidebar.</p>
+								<a href="/keybindings/">View keys</a>
+							</article>
+							<article class="panel">
+								<h3>Edit one main config</h3>
+								<p>Start with ~/.config/yazelix/settings.jsonc or open the ratconfig-backed config UI.</p>
+								<a href="/configure/">Configure</a>
+							</article>
+							<article class="panel">
+								<h3>Recover deliberately</h3>
+								<p>Use doctor, reset, and ownership-aware recovery paths instead of editing generated runtime state.</p>
+								<a href="/recover/">Recover</a>
+							</article>
+						</div>
+					</div>
+				</section>
+
+				<section class="section strip">
+					<div class="section-inner">
+						<h2>Product docs and project writing in one place</h2>
+						<p class="section-lede">
+							Docs explain the supported product. Blog posts can carry release essays, design notes, and
+							lessons from the evolving terminal IDE without mixing planning state into the reference docs.
+						</p>
+						<div class="blog-grid">
+							<article class="panel">
+								<h3>Install and update</h3>
+								<p>Nix profile and Home Manager paths, Cachix notes, and stale flake cache recovery.</p>
+								<a href="/start/">Start guide</a>
+							</article>
+							<article class="panel">
+								<h3>Reference docs</h3>
+								<p>Runtime model, customization surfaces, keybindings, and troubleshooting checklists.</p>
+								<a href="/docs/">Docs index</a>
+							</article>
+							<article class="panel">
+								<h3>Design notes</h3>
+								<p>Write about the workspace model, child repos, terminal support, and release decisions.</p>
+								<a href="/blog/">Blog</a>
+							</article>
+						</div>
+					</div>
+				</section>
+			</main>
+
+			<footer class="footer">
+				<div class="footer-inner">
+					<span>Yazelix is built by Lucca Huguet</span>
+					<a href="https://github.com/luccahuguet/yazelix">github.com/luccahuguet/yazelix</a>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>

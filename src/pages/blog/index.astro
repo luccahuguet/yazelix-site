@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import '../../styles/home.css';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Yazelix Blog</title>
+		<meta name="description" content="Release essays, design notes, and product writing for Yazelix." />
+	</head>
+	<body>
+		<div class="page-shell">
+			<nav class="nav" aria-label="Primary navigation">
+				<a class="brand" href="/">
+					<img src="/images/logo.png" alt="" />
+					<span>Yazelix</span>
+				</a>
+				<div class="nav-links">
+					<a href="/start/">Start</a>
+					<a href="/docs/">Docs</a>
+					<a href="/blog/">Blog</a>
+					<a href="https://github.com/luccahuguet/yazelix">GitHub</a>
+				</div>
+			</nav>
+			<main class="section" style="padding-top: 8rem;">
+				<div class="section-inner">
+					<h1 style="font-size: clamp(2.7rem, 7vw, 5rem);">Yazelix Blog</h1>
+					<p class="section-lede">
+						Release essays, design notes, and product writing for people following the Yazelix workspace.
+					</p>
+					<div class="blog-grid">
+						{
+							posts.map((post) => (
+								<article class="panel">
+									<h3>{post.data.title}</h3>
+									<p>{post.data.description}</p>
+									<p>{post.data.pubDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+									<a href={`/blog/${post.id}/`}>Read post</a>
+								</article>
+							))
+						}
+					</div>
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

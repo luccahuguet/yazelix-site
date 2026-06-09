@@ -1,0 +1,55 @@
+:root {
+	--sl-color-accent-low: #182b25;
+	--sl-color-accent: #2aa876;
+	--sl-color-accent-high: #c7f7de;
+	--sl-color-white: #f8fbf7;
+	--sl-color-gray-1: #e9efe8;
+	--sl-color-gray-2: #c4cec3;
+	--sl-color-gray-3: #92a092;
+	--sl-color-gray-4: #5d6a61;
+	--sl-color-gray-5: #344039;
+	--sl-color-gray-6: #1e2823;
+	--sl-color-black: #0b110f;
+	--sl-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	--sl-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: #dff7e9;
+	--sl-color-accent: #0b7f57;
+	--sl-color-accent-high: #073f30;
+	--sl-color-white: #0d1411;
+	--sl-color-gray-1: #1e2823;
+	--sl-color-gray-2: #36443d;
+	--sl-color-gray-3: #68776e;
+	--sl-color-gray-4: #98a69e;
+	--sl-color-gray-5: #d7dfd9;
+	--sl-color-gray-6: #edf2ee;
+	--sl-color-gray-7: #f7faf7;
+	--sl-color-black: #ffffff;
+}
+
+body {
+	letter-spacing: 0;
+}
+
+.site-title {
+	font-weight: 760;
+}
+
+.sl-markdown-content :is(h1, h2, h3) {
+	letter-spacing: 0;
+}
+
+.sl-markdown-content code {
+	border-radius: 4px;
+}
+
+.sl-markdown-content table {
+	font-size: 0.92rem;
+}
+
+.sl-markdown-content th,
+.sl-markdown-content td {
+	vertical-align: top;
+}

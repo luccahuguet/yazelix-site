@@ -1,0 +1,20 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs and test artifacts
+bun-error.log
+test-results/
+playwright-report/
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
