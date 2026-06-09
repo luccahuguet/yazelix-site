@@ -16,6 +16,7 @@ export default defineConfig({
 				src: './public/images/logo.png',
 				alt: 'Yazelix logo',
 			},
+			favicon: '/favicon.png',
 			components: {
 				ThemeProvider: './src/components/starlight/ThemeProvider.astro',
 			},
