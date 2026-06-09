@@ -39,13 +39,13 @@ a {
 .hero-visual {
 	position: relative;
 	z-index: 1;
-	width: min(1180px, 100%);
+	width: min(1240px, 100%);
 	margin: 0 auto;
 }
 
 .hero-visual img {
 	display: block;
-	width: min(100%, 1120px, 96vh);
+	width: min(100%, 1240px);
 	height: auto;
 	aspect-ratio: 1862 / 1017;
 	object-fit: contain;
@@ -299,7 +299,9 @@ h1 {
 	.hero {
 		min-height: 92vh;
 		padding-top: 5rem;
+		padding-right: 0.5rem;
 		padding-bottom: 3rem;
+		padding-left: 0.5rem;
 	}
 
 	.nav {
