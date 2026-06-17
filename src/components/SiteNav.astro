@@ -1,0 +1,31 @@
+---
+import GitHubLink from './GitHubLink.astro';
+
+type ActivePage = 'home' | 'features' | 'docs' | 'blog';
+
+const { active } = Astro.props as { active?: ActivePage };
+
+const links: { id: ActivePage; label: string; href: string }[] = [
+	{ id: 'home', label: 'Home', href: '/' },
+	{ id: 'features', label: 'Features', href: '/features/' },
+	{ id: 'docs', label: 'Docs', href: '/docs/' },
+	{ id: 'blog', label: 'Blog', href: '/blog/' },
+];
+---
+
+<nav class="nav" aria-label="Primary navigation">
+	<a class="brand" href="/">
+		<img src="/images/logo.png" alt="" />
+		<span>Yazelix</span>
+	</a>
+	<div class="nav-links">
+		{
+			links.map((link) => (
+				<a href={link.href} aria-current={active === link.id ? 'page' : undefined}>
+					{link.label}
+				</a>
+			))
+		}
+		<GitHubLink />
+	</div>
+</nav>

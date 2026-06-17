@@ -38,7 +38,7 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					items: [
-						{ label: 'Docs front door', slug: 'docs' },
+						{ label: 'All docs', link: '/docs/' },
 						{ label: 'Runtime model', slug: 'docs/runtime-model' },
 						{ label: 'Customization surfaces', slug: 'docs/customization-surfaces' },
 						{ label: 'Troubleshooting checklist', slug: 'docs/troubleshooting-checklist' },

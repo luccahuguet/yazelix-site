@@ -1,0 +1,66 @@
+---
+import FeatureMediaFrame from '../components/FeatureMediaFrame.astro';
+import SiteNav from '../components/SiteNav.astro';
+import { featureMediaGroups } from '../data/feature_media';
+import '../styles/home.css';
+
+const demoCount = featureMediaGroups.reduce((count, group) => count + group.items.length, 0);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Yazelix Features - Visual tour</title>
+		<meta
+			name="description"
+			content="A visual tour of Yazelix workspace surfaces, file opening flows, popups, sidebars, cursors, widgets, and visual settings."
+		/>
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body>
+		<div class="page-shell">
+			<SiteNav active="features" />
+
+			<main class="feature-page">
+				<section class="feature-intro">
+					<div class="section-inner">
+						<p class="eyebrow">{demoCount} planned visual demos</p>
+						<h1>Yazelix features</h1>
+						<p class="hero-copy">
+							A visual tour of the workspace: jumping and opening from Yazi, focusing sidebars, using
+							popups, comparing terminal cursor behavior, and seeing settings that are easier to judge by
+							sight.
+						</p>
+						<div class="hero-actions">
+							<a class="button primary" href="/start/">Start with Yazelix</a>
+							<a class="button secondary" href="/docs/">Read the docs</a>
+						</div>
+					</div>
+				</section>
+
+				{
+					featureMediaGroups.map((group, index) => (
+						<section class:list={['section', index % 2 === 1 && 'strip']}>
+							<div class="section-inner">
+								<div class="section-heading-row">
+									<div>
+										<p class="eyebrow">{group.items.length} demos</p>
+										<h2>{group.title}</h2>
+										<p class="section-lede">{group.summary}</p>
+									</div>
+								</div>
+								<div class="feature-gallery">
+									{group.items.map((item) => (
+										<FeatureMediaFrame item={item} />
+									))}
+								</div>
+							</div>
+						</section>
+					))
+				}
+			</main>
+		</div>
+	</body>
+</html>

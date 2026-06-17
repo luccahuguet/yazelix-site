@@ -1,0 +1,32 @@
+---
+import type { FeatureMediaItem } from '../data/feature_media';
+
+const { item, compact = false } = Astro.props as {
+	item: FeatureMediaItem;
+	compact?: boolean;
+};
+
+const mediaClass = compact ? 'feature-media compact' : 'feature-media';
+---
+
+<figure class={mediaClass}>
+	<div class="feature-media-frame">
+		{
+			item.kind === 'image' && item.asset ? (
+				<img src={item.asset} alt={item.title} loading="lazy" />
+			) : item.kind === 'video' && item.asset ? (
+				<video src={item.asset} poster={item.poster} preload="metadata" muted playsinline loop controls />
+			) : (
+				<div class="feature-placeholder" aria-label={`${item.title} capture planned`}>
+					<span>Capture planned</span>
+					<code>{item.id}</code>
+				</div>
+			)
+		}
+	</div>
+	<figcaption>
+		<strong>{item.title}</strong>
+		<span>{item.summary}</span>
+		{item.docsHref && <a href={item.docsHref}>Docs</a>}
+	</figcaption>
+</figure>

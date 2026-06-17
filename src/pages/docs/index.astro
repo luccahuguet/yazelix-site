@@ -1,0 +1,203 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteNav from '../../components/SiteNav.astro';
+import '../../styles/docs.css';
+
+type DocsSectionConfig = {
+	id: string;
+	label: string;
+	href: string;
+};
+
+const docsOrder: DocsSectionConfig[] = [
+	{ id: 'start', label: 'Start', href: '/start/' },
+	{ id: 'configure', label: 'Configure', href: '/configure/' },
+	{ id: 'keybindings', label: 'Keys', href: '/keybindings/' },
+	{ id: 'update', label: 'Update', href: '/update/' },
+	{ id: 'recover', label: 'Recover', href: '/recover/' },
+	{ id: 'docs/runtime-model', label: 'Runtime', href: '/docs/runtime-model/' },
+	{ id: 'docs/customization-surfaces', label: 'Customize', href: '/docs/customization-surfaces/' },
+	{ id: 'docs/troubleshooting-checklist', label: 'Troubleshoot', href: '/docs/troubleshooting-checklist/' },
+];
+
+const docsEntries = await getCollection('docs');
+const sections = await Promise.all(
+	docsOrder.map(async (section) => {
+		const entry = docsEntries.find((candidate) => candidate.id === section.id);
+
+		if (!entry) {
+			throw new Error(`Missing docs entry: ${section.id}`);
+		}
+
+		const { Content, headings } = await render(entry);
+		const anchor = section.id.replaceAll('/', '-');
+
+		return {
+			...section,
+			entry,
+			Content,
+			anchor,
+			subsections: headings
+				.filter((heading) => heading.depth === 2)
+				.map((heading) => ({
+					anchor: `${anchor}-${heading.slug}`,
+					sourceAnchor: heading.slug,
+					text: heading.text,
+				})),
+		};
+	}),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Yazelix Docs</title>
+		<meta
+			name="description"
+			content="Yazelix documentation for install, configuration, keybindings, updates, recovery, runtime behavior, customization, and troubleshooting."
+		/>
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body>
+		<div class="page-shell">
+			<SiteNav active="docs" />
+
+			<main class="docs-page">
+				<section class="docs-hero">
+					<div class="docs-hero-inner">
+						<h1>Yazelix docs</h1>
+					</div>
+				</section>
+
+				<div class="docs-shell">
+					<aside class="docs-rail" aria-label="Docs navigation">
+						<nav>
+							<span>Docs</span>
+							{
+								sections.map((section, index) => (
+									<div class="docs-rail-section">
+										<a
+											class:list={['docs-rail-section-link', index === 0 && 'is-active']}
+											href={`#${section.anchor}`}
+											data-docs-rail-link={section.anchor}
+											data-docs-rail-section={section.anchor}
+										>
+											<small>{String(index + 1).padStart(2, '0')}</small>
+											{section.entry.data.title}
+										</a>
+										<div class="docs-rail-subsections">
+											{section.subsections.map((subsection) => (
+												<a
+													class="docs-rail-subsection"
+													href={`#${subsection.anchor}`}
+													data-docs-rail-link={subsection.anchor}
+													data-docs-rail-section={section.anchor}
+												>
+													{subsection.text}
+												</a>
+											))}
+										</div>
+									</div>
+								))
+							}
+						</nav>
+					</aside>
+
+					<div class="docs-stream">
+						{
+							sections.map((section, index) => (
+								<section class="docs-chapter" id={section.anchor} data-docs-section={section.anchor}>
+									<header class="docs-chapter-header">
+										<p>{String(index + 1).padStart(2, '0')}</p>
+										<h2>{section.entry.data.title}</h2>
+										<span>{section.entry.data.description}</span>
+										<a href={section.href}>Standalone page</a>
+									</header>
+									<div class="docs-markdown">
+										<section.Content />
+									</div>
+								</section>
+							))
+						}
+					</div>
+				</div>
+			</main>
+		</div>
+		<script>
+			const rail = document.querySelector<HTMLElement>('.docs-rail');
+			const railLinks = Array.from(document.querySelectorAll<HTMLElement>('[data-docs-rail-link]'));
+			const docSections = Array.from(document.querySelectorAll<HTMLElement>('[data-docs-section]'));
+			const docTargets: Array<{ id: string; element: HTMLElement }> = [];
+
+			for (const section of docSections) {
+				const sectionId = section.getAttribute('data-docs-section');
+				if (!sectionId) continue;
+
+				docTargets.push({ id: sectionId, element: section });
+
+				for (const heading of section.querySelectorAll<HTMLElement>('.docs-markdown h2[id]')) {
+					heading.id = `${sectionId}-${heading.id}`;
+					docTargets.push({ id: heading.id, element: heading });
+				}
+			}
+
+			function setActiveDocsSection(activeId: string) {
+				const activeLink = railLinks.find((link) => link.getAttribute('data-docs-rail-link') === activeId);
+				const activeSection = activeLink?.getAttribute('data-docs-rail-section') ?? activeId;
+
+				for (const link of railLinks) {
+					const isExactActive = link.getAttribute('data-docs-rail-link') === activeId;
+					const isParentActive =
+						link.classList.contains('docs-rail-section-link') &&
+						link.getAttribute('data-docs-rail-section') === activeSection;
+
+					link.classList.toggle('is-active', isExactActive);
+					link.classList.toggle('is-parent-active', !isExactActive && isParentActive);
+				}
+
+				if (!rail || !activeLink) return;
+
+				const railRect = rail.getBoundingClientRect();
+				const linkRect = activeLink.getBoundingClientRect();
+
+				if (linkRect.top < railRect.top + 16 || linkRect.bottom > railRect.bottom - 16) {
+					activeLink.scrollIntoView({ block: 'nearest' });
+				}
+			}
+
+			function updateActiveDocsSection() {
+				const scrollBottom = window.scrollY + window.innerHeight;
+				const documentBottom = document.documentElement.scrollHeight;
+				const isAtPageBottom = scrollBottom >= documentBottom - 8;
+				const targetLine = window.innerHeight * (isAtPageBottom ? 0.7 : 0.34);
+				let activeId = docTargets[0]?.id;
+
+				for (const target of docTargets) {
+					if (target.element.getBoundingClientRect().top <= targetLine) {
+						activeId = target.id;
+					}
+				}
+
+				if (activeId) setActiveDocsSection(activeId);
+			}
+
+			let scrollUpdatePending = false;
+			function queueActiveDocsSectionUpdate() {
+				if (scrollUpdatePending) return;
+
+				scrollUpdatePending = true;
+				requestAnimationFrame(() => {
+					scrollUpdatePending = false;
+					updateActiveDocsSection();
+				});
+			}
+
+			updateActiveDocsSection();
+			window.addEventListener('scroll', queueActiveDocsSectionUpdate, { passive: true });
+			window.addEventListener('resize', queueActiveDocsSectionUpdate);
+		</script>
+	</body>
+</html>

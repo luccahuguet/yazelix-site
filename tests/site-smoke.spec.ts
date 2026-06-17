@@ -8,6 +8,7 @@ const routes = [
 	'/recover/',
 	'/keybindings/',
 	'/docs/',
+	'/features/',
 	'/blog/',
 	'/blog/docs-that-respect-runtime-boundaries/',
 ];
@@ -25,12 +26,59 @@ for (const route of routes) {
 test('home page exposes product and docs actions', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.getByRole('heading', { name: 'Yazelix' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page');
 	await expect(page.getByRole('link', { name: 'Start with Yazelix' })).toBeVisible();
-	await expect(page.getByRole('link', { name: 'Read the docs' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'See features' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Read docs' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'GitHub (opens in a new tab)' }).first()).toHaveAttribute(
+		'target',
+		'_blank',
+	);
+});
+
+test('features page exposes planned visual demo groups', async ({ page }) => {
+	await page.goto('/features/');
+	await expect(page.getByRole('heading', { name: 'Yazelix features' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Features' })).toHaveAttribute('aria-current', 'page');
+	await expect(page.getByRole('heading', { name: 'Yazi Jumps And Opening' })).toBeVisible();
+	await expect(page.getByText('Capture planned')).toHaveCount(25);
+	await expect(page.getByText('Yazi git decorations')).toBeVisible();
+	await expect(page.getByText('Icon-only Starship prompt')).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Docs' }).first()).toBeVisible();
+});
+
+test('docs page exposes the docs index stream', async ({ page }) => {
+	await page.goto('/docs/');
+	await expect(page.getByRole('heading', { name: 'Yazelix docs' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Docs' })).toHaveAttribute('aria-current', 'page');
+	await expect(page.getByRole('heading', { name: 'Start with Yazelix' })).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'Configure the Workspace' })).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'Troubleshooting Checklist' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Standalone page' })).toHaveCount(8);
+	await expect(page.locator('[data-docs-rail-link="start-install"]')).toHaveCount(1);
+	await expect(page.locator('[data-docs-rail-link="configure-home-manager"]')).toHaveCount(1);
+});
+
+test('docs sidebar highlights the current section', async ({ page }) => {
+	await page.goto('/docs/');
+	await page.evaluate(() => {
+		document.documentElement.style.scrollBehavior = 'auto';
+	});
+	await page.locator('#recover').evaluate((element) => element.scrollIntoView({ block: 'start' }));
+	await expect(page.locator('[data-docs-rail-link="recover"]')).toHaveClass(/is-active/);
+	const deepTargetTop = await page
+		.locator('#docs-troubleshooting-checklist-6-report-precise-failures')
+		.evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
+	await page.evaluate((top) => window.scrollTo(0, top), deepTargetTop);
+	await expect(
+		page.locator('[data-docs-rail-link="docs-troubleshooting-checklist-6-report-precise-failures"]'),
+	).toHaveClass(/is-active/);
+	await expect(page.locator('[data-docs-rail-link="docs-troubleshooting-checklist"]')).toHaveClass(/is-parent-active/);
 });
 
 test('blog index exposes multiple dated posts', async ({ page }) => {
 	await page.goto('/blog/');
+	await expect(page.getByRole('link', { name: 'Blog' })).toHaveAttribute('aria-current', 'page');
 	await expect(page.getByRole('link', { name: 'Read post' })).toHaveCount(3);
 	await expect(page.getByRole('heading', { name: 'Docs that respect runtime boundaries' })).toBeVisible();
 	await expect(page.getByRole('heading', { name: 'A reproducible terminal workspace' })).toBeVisible();

@@ -1,5 +1,14 @@
 ---
+import FeatureMediaFrame from '../components/FeatureMediaFrame.astro';
+import GitHubLink from '../components/GitHubLink.astro';
+import SiteNav from '../components/SiteNav.astro';
+import { featureItemsById, homepageFeatureIds } from '../data/feature_media';
 import '../styles/home.css';
+
+const itemsById = featureItemsById();
+const homepageFeatures = homepageFeatureIds
+	.map((id) => itemsById.get(id))
+	.filter((item): item is NonNullable<typeof item> => item !== undefined);
 ---
 
 <!doctype html>
@@ -16,20 +25,8 @@ import '../styles/home.css';
 	</head>
 	<body>
 		<div class="page-shell">
-			<header class="hero">
-				<nav class="nav" aria-label="Primary navigation">
-					<a class="brand" href="/">
-						<img src="/images/logo.png" alt="" />
-						<span>Yazelix</span>
-					</a>
-					<div class="nav-links">
-						<a href="/start/">Start</a>
-						<a href="/configure/">Configure</a>
-						<a href="/keybindings/">Keys</a>
-						<a href="/blog/">Blog</a>
-						<a href="https://github.com/luccahuguet/yazelix">GitHub</a>
-					</div>
-				</nav>
+			<header class="hero compact-hero">
+				<SiteNav active="home" />
 				<div class="hero-visual">
 					<img src="/images/yazelix_current_example.png" alt="Yazelix terminal workspace screenshot" />
 				</div>
@@ -42,7 +39,8 @@ import '../styles/home.css';
 					</p>
 					<div class="hero-actions">
 						<a class="button primary" href="/start/">Start with Yazelix</a>
-						<a class="button secondary" href="/docs/">Read the docs</a>
+						<a class="button secondary" href="/features/">See features</a>
+						<a class="button secondary" href="/docs/">Read docs</a>
 					</div>
 				</div>
 			</header>
@@ -50,67 +48,52 @@ import '../styles/home.css';
 			<main>
 				<section class="section strip">
 					<div class="section-inner">
-						<h2>The first successful path is short</h2>
+						<h2>Install with one command</h2>
 						<p class="section-lede">
-							Yazelix is package-first. Install the flake output, launch the workspace, then keep
-							configuration in one JSONC file unless you intentionally choose a deeper override surface.
+							Add the flake output to your profile. After it installs, run `yzx launch` to open the managed
+							workspace.
 						</p>
-						<div class="terminal" aria-label="Yazelix quickstart command">
-							<div class="terminal-header">quickstart</div>
-							<pre><code>nix profile add github:luccahuguet/yazelix#yazelix
-yzx launch</code></pre>
+						<div class="terminal" aria-label="Yazelix install command">
+							<div class="terminal-header">install</div>
+							<pre><code>nix profile add github:luccahuguet/yazelix#yazelix</code></pre>
 						</div>
 					</div>
 				</section>
 
 				<section class="section">
 					<div class="section-inner">
-						<h2>Built around the daily workspace loop</h2>
+						<h2>Watch what it does</h2>
 						<p class="section-lede">
-							The site starts with what users need on day one: launch, navigate, configure, update, and
-							recover. Deeper reference docs stay available without making the first path feel like repo archaeology.
+							The features page shows the workspace flows directly: Yazi jumps, editor targeting, sidebars,
+							popups, cursor behavior, widgets, and visual settings.
 						</p>
-						<div class="workflow-grid">
-							<article class="panel">
-								<h3>Navigate spatially</h3>
-								<p>Use Alt+Shift+H/J/K/L for the left sidebar, bottom popup, top popup, and right agent sidebar.</p>
-								<a href="/keybindings/">View keys</a>
-							</article>
-							<article class="panel">
-								<h3>Edit one main config</h3>
-								<p>Start with ~/.config/yazelix/settings.jsonc or open the ratconfig-backed config UI.</p>
-								<a href="/configure/">Configure</a>
-							</article>
-							<article class="panel">
-								<h3>Recover deliberately</h3>
-								<p>Use doctor, reset, and ownership-aware recovery paths instead of editing generated runtime state.</p>
-								<a href="/recover/">Recover</a>
-							</article>
+						<div class="feature-preview-grid">
+							{homepageFeatures.map((item) => <FeatureMediaFrame item={item} compact />)}
 						</div>
 					</div>
 				</section>
 
 				<section class="section strip">
 					<div class="section-inner">
-						<h2>Product docs and project writing in one place</h2>
+						<h2>Use docs for exact steps</h2>
 						<p class="section-lede">
-							Docs explain the supported product. Blog posts can carry release essays, design notes, and
-							lessons from the evolving terminal IDE without mixing planning state into the reference docs.
+							Docs are for install commands, settings, update paths, recovery, keybindings, and reference
+							details. The feature tour is for seeing the workspace.
 						</p>
 						<div class="blog-grid">
 							<article class="panel">
-								<h3>Install and update</h3>
-								<p>Nix profile and Home Manager paths, Cachix notes, and stale flake cache recovery.</p>
-								<a href="/start/">Start guide</a>
+								<h3>Features</h3>
+								<p>Workspace screens, opening flows, sidebars, popups, cursors, widgets, and visual settings.</p>
+								<a href="/features/">View tour</a>
 							</article>
 							<article class="panel">
-								<h3>Reference docs</h3>
-								<p>Runtime model, customization surfaces, keybindings, and troubleshooting checklists.</p>
+								<h3>Docs</h3>
+								<p>Install, configure, update, recover, keybindings, and reference material.</p>
 								<a href="/docs/">Docs index</a>
 							</article>
 							<article class="panel">
-								<h3>Design notes</h3>
-								<p>Write about the workspace model, child repos, terminal support, and release decisions.</p>
+								<h3>Blog</h3>
+								<p>Release essays, design notes, and product reasoning for the terminal workspace.</p>
 								<a href="/blog/">Blog</a>
 							</article>
 						</div>
@@ -121,7 +104,7 @@ yzx launch</code></pre>
 			<footer class="footer">
 				<div class="footer-inner">
 					<span>Yazelix is built by Lucca Huguet</span>
-					<a href="https://github.com/luccahuguet/yazelix">github.com/luccahuguet/yazelix</a>
+					<GitHubLink label="github.com/luccahuguet/yazelix" class="footer-github-link" showLabel />
 				</div>
 			</footer>
 		</div>

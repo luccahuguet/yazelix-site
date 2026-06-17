@@ -1,6 +1,6 @@
 ---
 title: Start with Yazelix
-description: Install Yazelix, launch the workspace, and understand the first successful path.
+description: Install Yazelix, launch the workspace, and learn the basic runtime model.
 ---
 
 Yazelix is a package-first terminal workspace. You need Nix with flakes enabled; Yazelix supplies the runtime tools it owns.
@@ -9,6 +9,11 @@ Yazelix is a package-first terminal workspace. You need Nix with flakes enabled;
 
 ```bash
 nix profile add github:luccahuguet/yazelix#yazelix
+```
+
+Then launch the workspace:
+
+```bash
 yzx launch
 ```
 

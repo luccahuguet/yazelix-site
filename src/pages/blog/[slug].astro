@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import SiteNav from '../../components/SiteNav.astro';
 import '../../styles/home.css';
 
 export async function getStaticPaths() {
@@ -22,18 +23,7 @@ const { Content } = await render(post);
 	</head>
 	<body>
 		<div class="page-shell">
-			<nav class="nav" aria-label="Primary navigation">
-				<a class="brand" href="/">
-					<img src="/images/logo.png" alt="" />
-					<span>Yazelix</span>
-				</a>
-				<div class="nav-links">
-					<a href="/start/">Start</a>
-					<a href="/docs/">Docs</a>
-					<a href="/blog/">Blog</a>
-					<a href="https://github.com/luccahuguet/yazelix">GitHub</a>
-				</div>
-			</nav>
+			<SiteNav active="blog" />
 			<main class="section" style="padding-top: 8rem;">
 				<article class="section-inner" style="max-width: 780px;">
 					<p class="eyebrow">{post.data.pubDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
