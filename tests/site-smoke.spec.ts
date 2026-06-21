@@ -36,12 +36,14 @@ test('home page exposes product and docs actions', async ({ page }) => {
 	);
 });
 
-test('features page exposes planned visual demo groups', async ({ page }) => {
+test('features page exposes filled visual demo groups', async ({ page }) => {
 	await page.goto('/features/');
 	await expect(page.getByRole('heading', { name: 'Yazelix features' })).toBeVisible();
 	await expect(page.getByRole('link', { name: 'Features' })).toHaveAttribute('aria-current', 'page');
+	await expect(page.getByText('26 visual demos')).toBeVisible();
 	await expect(page.getByRole('heading', { name: 'Yazi Jumps And Opening' })).toBeVisible();
-	await expect(page.getByText('Capture planned')).toHaveCount(25);
+	await expect(page.locator('.feature-page .feature-media img')).toHaveCount(26);
+	await expect(page.locator('.feature-page .feature-placeholder')).toHaveCount(0);
 	await expect(page.getByText('Yazi git decorations')).toBeVisible();
 	await expect(page.getByText('Icon-only Starship prompt')).toBeVisible();
 	await expect(page.getByRole('link', { name: 'Docs' }).first()).toBeVisible();

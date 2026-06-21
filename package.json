@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test:e2e": "playwright test",
+    "test:e2e": "env -u NO_COLOR playwright test",
     "astro": "astro"
   },
   "dependencies": {
